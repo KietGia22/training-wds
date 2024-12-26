@@ -1,3 +1,5 @@
+require('dotenv').config()
+require('express-async-errors')
 const http = require('http');
 const express = require('express');
 const morgan = require('morgan');
@@ -8,6 +10,7 @@ const cors = require('cors');
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpecs = require("./docs/swaggerDoc");
 const Router = require('./routes/index');
+const connectDB = require('./config/mongoConnect');
 
 const app = express();
 
@@ -31,6 +34,7 @@ const server = http.createServer(app);
 
 const start = async () => {
     try {
+        await connectDB(process.env.MONGO_URI)
         server.listen(port, () => {
             console.log(`Listening on port ${port}`);
             console.log(`Swagger UI available at http://localhost:${port}/api-docs`);
