@@ -8,9 +8,8 @@ const bookSchema = new mongoose.Schema({
         maxLength: 100,
     },
     price: {
-        type: String,
+        type: Number,
         required: [true, 'Please provide price'],
-        minLength: 4
     },
     author: {
         type: String,

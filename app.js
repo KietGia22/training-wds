@@ -38,7 +38,6 @@ const start = async () => {
         await connectDB(process.env.MONGO_URI)
         server.listen(port, () => {
             console.log(`Listening on port ${port}`);
-            console.log(`Swagger UI available at http://localhost:${port}/api-docs`);
         })
     } catch (error) {
         console.error(error);
