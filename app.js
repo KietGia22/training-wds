@@ -9,7 +9,11 @@ const xss = require('xss-clean');
 const cors = require('cors');
 const Router = require('./src/routes/index');
 const connectDB = require('./src/config/mongoConnect');
-const middlewareApp = require('./src/middlewares/index')
+const {
+    error_handler,
+    not_found,
+    apiResponse
+} = require('./src/middlewares/index')
 
 const app = express();
 
@@ -23,11 +27,13 @@ app.use(xss());
 app.use(morgan('tiny'));
 app.use(express.json());
 
+app.use(apiResponse)
+
 app.use('/api/v1', Router)
 
-app.use(middlewareApp.not_found)
+app.use(not_found)
 
-app.use(middlewareApp.error_handler)
+app.use(error_handler)
 
 const port = process.env.PORT || 3000;
 

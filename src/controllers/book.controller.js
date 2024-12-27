@@ -4,7 +4,7 @@ const {StatusCodes} = require('http-status-codes')
 const getAll = async(req, res, next) => {
     const { books } = await bookService.getAllBooks();
 
-    res.status(StatusCodes.OK).json(books);
+    res.success(books, StatusCodes.OK)
 }
 
 const getBook = async(req, res, next) => {
@@ -20,7 +20,7 @@ const addBook = async(req, res, next) => {
 
     const { newBook } = await bookService.createBook(body);
 
-    res.status(StatusCodes.OK).json(newBook);
+    res.success(newBook, StatusCodes.CREATED);
 }
 
 module.exports = {
