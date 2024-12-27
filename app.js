@@ -7,10 +7,9 @@ const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const xss = require('xss-clean');
 const cors = require('cors');
-const swaggerUi = require("swagger-ui-express");
-const swaggerSpecs = require("./docs/swaggerDoc");
-const Router = require('./routes/index');
-const connectDB = require('./config/mongoConnect');
+const Router = require('./src/routes/index');
+const connectDB = require('./src/config/mongoConnect');
+const middlewareApp = require('./src/middlewares/index')
 
 const app = express();
 
@@ -24,9 +23,11 @@ app.use(xss());
 app.use(morgan('tiny'));
 app.use(express.json());
 
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
-
 app.use('/api/v1', Router)
+
+app.use(middlewareApp.not_found)
+
+app.use(middlewareApp.error_handler)
 
 const port = process.env.PORT || 3000;
 
