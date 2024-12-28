@@ -1,21 +1,47 @@
 const {bookModel} = require('../models/index')
+const customError = require('../errors/index')
+const validatation = require('../utils/validation');
 
 const getAllBooks = async() => {
-    const books = await  bookModel.find({});
+    try {
+        const books = await  bookModel.find({});
 
-    return { books };
+        return { books };
+    } catch (err) {
+        throw err;
+    }
 }
 
 const getBookById = async(bookId) => {
-    const book = await bookModel.findById(bookId);
+    try {
+        const book = await bookModel.findById(bookId);
 
-    return { book };
+        if(!book) {
+            throw new customError.NotFoundError("Book not found")
+        }
+
+        return { book };
+    } catch (err) {
+        throw err
+    }
 }
 
 const createBook = async(body) => {
-    const newBook = await bookModel.create(body);
+    try {
+        const isChecked = await validatation(body)
 
-    return { newBook };
+        console.log(isChecked)
+    
+        if(isChecked.error) {
+            throw new customError.BadRequestError(isChecked.error.message);
+        }
+
+        const newBook = await bookModel.create(body);
+
+        return { newBook };
+    } catch (err) {
+        throw err;
+    }
 }
 
 module.exports = {

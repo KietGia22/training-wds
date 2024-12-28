@@ -2,25 +2,37 @@ const {bookService} = require('../services/index')
 const {StatusCodes} = require('http-status-codes')
 
 const getAll = async(req, res, next) => {
-    const { books } = await bookService.getAllBooks();
+    try {
+        const { books } = await bookService.getAllBooks();
 
-    res.success(books, StatusCodes.OK)
+        res.success(books, StatusCodes.OK)
+    } catch (err) {
+        next(err)
+    }
 }
 
 const getBook = async(req, res, next) => {
-    const {id: bookId} = req.params;
+    try {
+        const {id: bookId} = req.params;
 
-    const { book } = await bookService.getBookById(bookId);
+        const { book } = await bookService.getBookById(bookId);
 
-    res.status(StatusCodes.OK).json(book);
+        res.success(book, StatusCodes.OK)
+    } catch (err) {
+        next(err);
+    }
 }
 
 const addBook = async(req, res, next) => {
-    const body = req.body;
+    try {
+        const body = req.body;
 
-    const { newBook } = await bookService.createBook(body);
+        const { newBook } = await bookService.createBook(body);
 
-    res.success(newBook, StatusCodes.CREATED);
+        res.success(newBook, StatusCodes.CREATED);
+    } catch (err) {
+        next(err);
+    }
 }
 
 module.exports = {
